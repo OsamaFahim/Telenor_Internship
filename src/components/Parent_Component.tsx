@@ -8,6 +8,8 @@ const Root: React.FC = () => {
     const [FormList, SetFormList] = useState<FormData[]>([]);
     const [archiveList, setarchiveList] = useState<FormData[]>([]);
     const [editIndex, setEditIndex] = useState<number | null>(null);
+    //State to load data only once from the JSON else show an alert, that "Data is already loaded from the JSON"
+    const [isLoadedFromJSON, setisLoadedFromJSON] = useState<boolean>(false);
 
     //We can edit the same form for editing the data
     const handleAddForm = (newForm: FormData) => {
@@ -35,8 +37,14 @@ const Root: React.FC = () => {
     }
 
     const handleLoadDataFromJSON = () => {
-        const datafromJSON = ImportDataFromJson();
-        SetFormList(prev => [...prev, ...datafromJSON]);
+        //Load Data fron JSON only once
+        if (isLoadedFromJSON === false) {
+            const datafromJSON = ImportDataFromJson();
+            SetFormList(prev => [...prev, ...datafromJSON]);
+            setisLoadedFromJSON(true);
+        } else {
+            alert("Data has already been loaded from the JSON");
+        }
     }
 
      //As returning multiple TSX elements, so it must be wrapped either in a div or a Fragment<>
